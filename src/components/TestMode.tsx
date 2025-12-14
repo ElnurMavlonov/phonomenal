@@ -5,11 +5,10 @@ import WordPractice from './WordPractice';
 import './TestMode.css';
 
 interface TestModeProps {
-  student: Student;
   onBack: () => void;
 }
 
-export default function TestMode({ student, onBack }: TestModeProps) {
+export default function TestMode({ onBack }: TestModeProps) {
   const [words, setWords] = useState<Word[]>([]);
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [recordings, setRecordings] = useState<Record<number, { audioBlob: Blob; accuracy: number }>>({});

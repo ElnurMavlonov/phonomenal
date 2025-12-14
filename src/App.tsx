@@ -42,10 +42,10 @@ function App() {
         />
       )}
       {state === 'practice' && student && (
-        <PracticeMode student={student} onBack={handleBackToMenu} />
+        <PracticeMode onBack={handleBackToMenu} />
       )}
       {state === 'test' && student && (
-        <TestMode student={student} onBack={handleBackToMenu} />
+        <TestMode onBack={handleBackToMenu} />
       )}
     </div>
   );

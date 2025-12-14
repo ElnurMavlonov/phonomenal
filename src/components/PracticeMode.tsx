@@ -7,13 +7,12 @@ import WordPractice from './WordPractice';
 import './PracticeMode.css';
 
 interface PracticeModeProps {
-  student: Student;
   onBack: () => void;
 }
 
 type PracticeState = 'select-group' | 'select-phoneme' | 'practicing';
 
-export default function PracticeMode({ student, onBack }: PracticeModeProps) {
+export default function PracticeMode({ onBack }: PracticeModeProps) {
   const [state, setState] = useState<PracticeState>('select-group');
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
   const [selectedPhoneme, setSelectedPhoneme] = useState<Phoneme | null>(null);
