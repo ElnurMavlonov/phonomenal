@@ -1,0 +1,303 @@
+.word-practice {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.word-card {
+  background: #F8FAFC;
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  border: 1px solid #E2E8F0;
+}
+
+.word-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.word-number {
+  color: #64748B;
+  font-size: 0.9rem;
+}
+
+.phoneme-badge {
+  background: #2563EB;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.word-display {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.target-word {
+  font-size: 3.5rem;
+  color: #1E293B;
+  margin: 20px 0;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.phoneme-info {
+  color: #64748B;
+  font-size: 1.1rem;
+  margin-top: 10px;
+}
+
+.recording-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.record-button,
+.stop-button,
+.play-button {
+  padding: 16px 32px;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  min-width: 200px;
+}
+
+.record-button {
+  background: #2563EB;
+  color: white;
+}
+
+.record-button:hover {
+  background: #1D4ED8;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+}
+
+.stop-button {
+  background: #EF4444;
+  color: white;
+}
+
+.stop-button:hover {
+  background: #DC2626;
+  transform: translateY(-2px);
+}
+
+.play-button {
+  background: #10B981;
+  color: white;
+}
+
+.play-button:hover {
+  background: #059669;
+  transform: translateY(-2px);
+}
+
+.recording-active {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.recording-indicator {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #EF4444;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.pulse-dot {
+  width: 12px;
+  height: 12px;
+  background: #EF4444;
+  border-radius: 50%;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.2);
+  }
+}
+
+.processing {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  color: #64748B;
+  font-weight: 600;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #E2E8F0;
+  border-top: 4px solid #2563EB;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.accuracy-display {
+  padding: 20px 40px;
+  border-radius: 15px;
+  color: white;
+  text-align: center;
+  min-width: 200px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.accuracy-label {
+  display: block;
+  font-size: 0.9rem;
+  opacity: 0.9;
+  margin-bottom: 5px;
+}
+
+.accuracy-value {
+  display: block;
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+.recognized-text {
+  background: white;
+  border: 2px solid #E2E8F0;
+  border-radius: 10px;
+  padding: 12px 20px;
+  text-align: center;
+  min-width: 200px;
+}
+
+.recognized-label {
+  display: block;
+  font-size: 0.85rem;
+  color: #64748B;
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+
+.recognized-value {
+  display: block;
+  font-size: 1.1rem;
+  color: #1E293B;
+  font-weight: 600;
+  font-style: italic;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .word-practice {
+    max-width: 100%;
+    width: 100%;
+    padding: 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-top: 20px;
+    padding-bottom: 100px; /* Space for navigation if present */
+  }
+
+  .word-card {
+    padding: 32px 24px;
+    border-radius: 0;
+    width: 100%;
+    max-width: 100%;
+    box-shadow: none;
+    border: none;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .word-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+  }
+
+  .target-word {
+    font-size: 2.8rem;
+    margin: 20px 0;
+    letter-spacing: 1px;
+  }
+
+  .phoneme-info {
+    font-size: 1.05rem;
+    margin-top: 12px;
+  }
+
+  .recording-section {
+    gap: 24px;
+    width: 100%;
+  }
+
+  .record-button,
+  .stop-button,
+  .play-button {
+    padding: 18px 24px;
+    font-size: 1.1rem;
+    min-width: 100%;
+    width: 100%;
+    min-height: 56px; /* Better touch target */
+  }
+
+  .accuracy-display {
+    padding: 24px 30px;
+    min-width: 100%;
+    width: 100%;
+  }
+
+  .accuracy-value {
+    font-size: 2.2rem;
+  }
+
+  .recognized-text {
+    min-width: 100%;
+    width: 100%;
+    padding: 14px 18px;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .word-practice {
+    max-width: 600px;
+  }
+
+  .word-card {
+    padding: 35px 30px;
+  }
+
+  .target-word {
+    font-size: 3rem;
+  }
+}
+
