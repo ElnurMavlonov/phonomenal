@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Student, Phoneme, Word } from '../types';
+import { Phoneme, Word } from '../types';
 import { phonemeGroups } from '../data/phonemes';
 import { getWordsByPhoneme } from '../data/words';
 import PhonemeGroupList from './PhonemeGroupList';

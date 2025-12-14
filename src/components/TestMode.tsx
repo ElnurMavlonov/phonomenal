@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Student, Word } from '../types';
+import { Word } from '../types';
 import { getRandomWords } from '../data/words';
 import WordPractice from './WordPractice';
 import './TestMode.css';
