@@ -60,7 +60,23 @@ export class AudioRecorder {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       this.stream = stream;
-      this.mediaRecorder = new MediaRecorder(stream);
+      
+      // Determine the best MIME type for the current browser
+      let mimeType = 'audio/webm';
+      const options: MediaRecorderOptions = {};
+      
+      if (MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) {
+        mimeType = 'audio/webm;codecs=opus';
+      } else if (MediaRecorder.isTypeSupported('audio/webm')) {
+        mimeType = 'audio/webm';
+      } else if (MediaRecorder.isTypeSupported('audio/mp4')) {
+        mimeType = 'audio/mp4';
+      } else if (MediaRecorder.isTypeSupported('audio/ogg;codecs=opus')) {
+        mimeType = 'audio/ogg;codecs=opus';
+      }
+      
+      options.mimeType = mimeType;
+      this.mediaRecorder = new MediaRecorder(stream, options);
       this.audioChunks = [];
       this.recognizedText = '';
       this.recognitionConfidence = 0;
@@ -214,7 +230,9 @@ export class AudioRecorder {
         // Give a small delay to ensure final result is captured
         await new Promise(resolve => setTimeout(resolve, 300));
         
-        const audioBlob = new Blob(this.audioChunks, { type: 'audio/wav' });
+        // Use the actual MIME type from MediaRecorder, or fallback to webm
+        const mimeType = this.mediaRecorder?.mimeType || 'audio/webm';
+        const audioBlob = new Blob(this.audioChunks, { type: mimeType });
         this.cleanup();
         resolve(audioBlob);
       };
@@ -393,9 +411,64 @@ export async function calculateAccuracy(
 }
 
 export function playAudio(audioBlob: Blob): void {
+  // Validate blob
+  if (!audioBlob || audioBlob.size === 0) {
+    console.error('Invalid audio blob');
+    alert('No audio data available to play.');
+    return;
+  }
+  
   const audioUrl = URL.createObjectURL(audioBlob);
   const audio = new Audio(audioUrl);
-  audio.play().then(() => {
-    audio.onended = () => URL.revokeObjectURL(audioUrl);
-  });
+  
+  // iOS Safari requires audio to be loaded before playing
+  audio.preload = 'auto';
+  
+  // Set volume (iOS sometimes requires this)
+  audio.volume = 1.0;
+  
+  // Handle errors
+  audio.onerror = (error) => {
+    console.error('Error playing audio:', error);
+    URL.revokeObjectURL(audioUrl);
+    alert('Failed to play audio. Please try again.');
+  };
+  
+  // Clean up URL when audio ends
+  audio.onended = () => {
+    URL.revokeObjectURL(audioUrl);
+  };
+  
+  // Load and play audio
+  audio.load();
+  
+  // Play audio - iOS Safari requires this to be in response to user gesture
+  const playPromise = audio.play();
+  
+  if (playPromise !== undefined) {
+    playPromise
+      .then(() => {
+        // Audio started playing successfully
+        console.log('Audio playback started');
+      })
+      .catch((error) => {
+        console.error('Error playing audio:', error);
+        // On iOS, this might fail if not in response to user gesture
+        // Try again with a slight delay
+        setTimeout(() => {
+          audio.play().catch((err) => {
+            console.error('Retry failed:', err);
+            URL.revokeObjectURL(audioUrl);
+            alert('Failed to play audio. Please ensure you clicked the play button.');
+          });
+        }, 100);
+      });
+  } else {
+    // Fallback for older browsers
+    audio.play().catch((err) => {
+      console.error('Play failed:', err);
+      URL.revokeObjectURL(audioUrl);
+      alert('Failed to play audio. Please try again.');
+    });
+  }
 }
