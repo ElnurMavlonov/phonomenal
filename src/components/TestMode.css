@@ -130,7 +130,7 @@
 
 .navigation-buttons {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-between; /* Default for mobile */
   align-items: center;
   background: #F8FAFC;
   padding: 20px;
@@ -370,14 +370,41 @@
   }
 
   .navigation-buttons {
-    padding: 24px 32px;
+    padding: 16px 32px;
     margin-top: 24px;
     border-radius: 20px;
+    display: flex;
+    justify-content: center; /* Center the buttons */
+    align-items: center;
+    gap: 0; /* No gap - buttons directly adjacent */
   }
 
   .nav-button {
-    padding: 12px 28px;
-    font-size: 1rem;
+    padding: 10px 16px;
+    font-size: 0.9rem;
+    min-width: 80px;
+    max-width: 90px;
+    flex-shrink: 0;
+    white-space: nowrap; /* Prevent button text from wrapping */
+    line-height: 1.2; /* Single line height */
+    height: auto; /* Auto height */
+    display: inline-flex; /* Inline flex to stay on one line */
+    align-items: center;
+    justify-content: center;
+  }
+
+  .word-counter {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #1E293B;
+    padding: 0 8px; /* Small padding on sides */
+    white-space: nowrap; /* Prevent wrapping */
+    margin: 0; /* No extra margin */
+    line-height: 1.2; /* Single line height */
+    display: inline-block; /* Ensure single line */
+    flex-shrink: 0; /* Don't shrink */
+    width: auto; /* Auto width */
+    height: auto; /* Auto height */
   }
 }
 
