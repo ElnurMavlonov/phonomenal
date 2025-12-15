@@ -24,3 +24,11 @@
   }
 }
 
+/* Desktop and Laptop Optimizations */
+@media (min-width: 1025px) {
+  .app {
+    padding: 30px;
+    background: linear-gradient(to bottom, #F8FAFC 0%, #F1F5F9 100%);
+  }
+}
+

@@ -59,6 +59,14 @@
   gap: 20px;
 }
 
+.results-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+}
+
 .record-button,
 .stop-button,
 .play-button {
@@ -214,14 +222,13 @@
     max-width: 100%;
     width: 100%;
     padding: 20px;
-    min-height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    flex: 1;
+    min-height: 0; /* Allow flex shrinking */
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     padding-top: 20px;
-    padding-bottom: 100px; /* Space for navigation if present */
   }
 
   .word-card {
@@ -231,10 +238,10 @@
     max-width: 100%;
     box-shadow: none;
     border: none;
-    min-height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    flex: 1;
+    min-height: 0; /* Allow flex shrinking */
   }
 
   .word-header {
@@ -260,8 +267,21 @@
     width: 100%;
   }
 
+  .results-container {
+    flex-direction: column;
+    width: 100%;
+    gap: 20px;
+  }
+
   .record-button,
-  .stop-button,
+  .stop-button {
+    padding: 18px 24px;
+    font-size: 1.1rem;
+    min-width: 100%;
+    width: 100%;
+    min-height: 56px; /* Better touch target */
+  }
+
   .play-button {
     padding: 18px 24px;
     font-size: 1.1rem;
@@ -298,6 +318,175 @@
 
   .target-word {
     font-size: 3rem;
+  }
+}
+
+/* Desktop and Laptop Optimizations */
+@media (min-width: 1025px) {
+  .word-practice {
+    max-width: 900px;
+    padding: 20px;
+    flex: 1 1 auto; /* Grow to fill available space */
+    min-height: 0; /* Critical for flex shrinking */
+    overflow: hidden; /* Let word-card handle scrolling */
+    display: flex;
+    flex-direction: column;
+  }
+
+  .word-card {
+    padding: 50px 60px 40px 60px; /* More bottom padding to prevent cutoff */
+    border-radius: 24px;
+    flex: 1 1 auto; /* Grow and shrink as needed */
+    min-height: 0; /* Allow flex shrinking */
+    max-height: 100%; /* Don't exceed parent height */
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto; /* Allow scrolling if content is too tall */
+    overflow-x: hidden;
+    scrollbar-width: thin; /* Better scrollbar on desktop */
+    scrollbar-color: #CBD5E1 #F8FAFC;
+  }
+
+  .word-card::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .word-card::-webkit-scrollbar-track {
+    background: #F8FAFC;
+    border-radius: 4px;
+  }
+
+  .word-card::-webkit-scrollbar-thumb {
+    background: #CBD5E1;
+    border-radius: 4px;
+  }
+
+  .word-card::-webkit-scrollbar-thumb:hover {
+    background: #94A3B8;
+  }
+
+  .word-header {
+    margin-bottom: 40px;
+    flex-shrink: 0; /* Don't shrink header */
+  }
+
+  .word-number {
+    font-size: 1rem;
+  }
+
+  .phoneme-badge {
+    padding: 8px 18px;
+    font-size: 1rem;
+  }
+
+  .word-display {
+    margin-bottom: 50px;
+    flex-shrink: 0; /* Don't shrink word display */
+  }
+
+  .target-word {
+    font-size: 4.5rem;
+    margin: 30px 0;
+    letter-spacing: 3px;
+  }
+
+  .phoneme-info {
+    font-size: 1.3rem;
+    margin-top: 15px;
+  }
+
+  .recording-section {
+    gap: 24px;
+    flex-shrink: 0; /* Don't shrink recording section */
+    margin-bottom: 20px; /* Add space before results */
+  }
+
+  .record-button,
+  .stop-button {
+    padding: 18px 40px;
+    font-size: 1.2rem;
+    min-width: 240px;
+    border-radius: 14px;
+  }
+
+  .recording-indicator {
+    font-size: 1.2rem;
+  }
+
+  /* Side-by-side layout for results on desktop */
+  .results-container {
+    flex-direction: row;
+    justify-content: center;
+    align-items: stretch; /* Stretch to same height */
+    gap: 20px; /* Reasonable gap between elements */
+    flex-wrap: nowrap; /* Prevent wrapping */
+    width: 100%;
+    max-width: 540px; /* Optimal width for side-by-side layout */
+    margin: 0 auto 30px auto; /* Center horizontally, keep bottom margin */
+    flex-shrink: 0; /* Don't shrink */
+    padding: 0; /* No padding to prevent cutoff issues */
+  }
+
+  .accuracy-display {
+    padding: 24px 32px; /* Generous padding, especially vertical */
+    min-width: 200px;
+    max-width: 260px;
+    flex: 1 1 0; /* Equal flex growth */
+    border-radius: 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    min-height: 90px; /* Ensure enough height for text */
+    overflow: visible; /* Ensure text isn't clipped */
+  }
+
+  .accuracy-label {
+    font-size: 0.85rem;
+    margin-bottom: 8px; /* Good spacing between label and value */
+    line-height: 1.3;
+    text-align: center;
+  }
+
+  .accuracy-value {
+    font-size: 2.2rem;
+    line-height: 1.2; /* Tight line height for percentage */
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    overflow: visible; /* Ensure text isn't clipped */
+  }
+
+  .play-button {
+    padding: 20px 32px; /* Generous padding to match accuracy display */
+    font-size: 1rem;
+    min-width: 200px;
+    max-width: 260px;
+    flex: 1 1 0; /* Equal flex growth */
+    border-radius: 14px;
+    white-space: nowrap;
+    box-sizing: border-box;
+    min-height: 90px; /* Match accuracy display height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .recognized-text {
+    padding: 16px 28px;
+    min-width: 280px;
+    max-width: 100%;
+    border-radius: 12px;
+    width: 100%;
+  }
+
+  .recognized-label {
+    font-size: 0.95rem;
+  }
+
+  .recognized-value {
+    font-size: 1.2rem;
   }
 }
 

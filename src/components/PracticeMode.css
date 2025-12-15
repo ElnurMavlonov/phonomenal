@@ -142,6 +142,8 @@
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
     position: relative;
+    display: flex;
+    flex-direction: column;
   }
 
   .practice-header {
@@ -222,6 +224,8 @@
     bottom: 0;
     background: #F8FAFC;
     z-index: 10;
+    margin-top: auto; /* Push to bottom in flex container */
+    flex-shrink: 0; /* Don't shrink */
   }
 
   .nav-button {
@@ -244,6 +248,97 @@
 
   .phoneme-grid {
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  }
+}
+
+/* Desktop and Laptop Optimizations */
+@media (min-width: 1025px) {
+  .practice-mode {
+    max-width: 1200px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 60px); /* Fixed height to account for app padding */
+    overflow: hidden; /* Prevent container scrolling */
+  }
+
+  .practice-header {
+    padding: 24px 32px;
+    margin-bottom: 24px;
+    flex-shrink: 0; /* Don't shrink header */
+  }
+
+  .practice-header h2 {
+    font-size: 1.75rem;
+  }
+
+  .practice-header .phoneme-name {
+    font-size: 1rem;
+  }
+
+  .phoneme-grid {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+  }
+
+  .phoneme-button {
+    padding: 24px;
+    min-height: 140px;
+  }
+
+  .phoneme-symbol {
+    font-size: 2.5rem;
+  }
+
+  .phoneme-name {
+    font-size: 1.05rem;
+  }
+
+  .phoneme-desc {
+    font-size: 0.9rem;
+  }
+
+  .navigation-buttons {
+    padding: 16px 32px;
+    margin-top: auto; /* Push to bottom in flex container */
+    flex-shrink: 0; /* Don't shrink */
+    position: relative; /* Ensure it's in normal flow */
+    z-index: 5; /* Above content but below header */
+    background: #F8FAFC; /* Match background */
+    border-top: 1px solid #E2E8F0; /* Visual separator */
+    border-radius: 0 0 15px 15px;
+    display: flex;
+    justify-content: center; /* Center the buttons */
+    align-items: center;
+    gap: 0; /* No gap - buttons directly adjacent */
+  }
+
+  .nav-button {
+    padding: 10px 16px;
+    font-size: 0.9rem;
+    min-width: 80px;
+    max-width: 90px;
+    flex-shrink: 0;
+    white-space: nowrap; /* Prevent button text from wrapping */
+    line-height: 1.2; /* Single line height */
+    height: auto; /* Auto height */
+    display: inline-flex; /* Inline flex to stay on one line */
+    align-items: center;
+    justify-content: center;
+  }
+
+  .word-counter {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #1E293B;
+    padding: 0 8px; /* Small padding on sides */
+    white-space: nowrap; /* Prevent wrapping */
+    margin: 0; /* No extra margin */
+    line-height: 1.2; /* Single line height */
+    display: inline-block; /* Ensure single line */
+    flex-shrink: 0; /* Don't shrink */
+    width: auto; /* Auto width */
+    height: auto; /* Auto height */
   }
 }
 

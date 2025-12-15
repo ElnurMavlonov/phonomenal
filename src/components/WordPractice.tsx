@@ -164,24 +164,26 @@ export default function WordPractice({
             </div>
           )}
 
-          {currentAccuracy !== null && (
-            <div
-              className="accuracy-display"
-              style={{ backgroundColor: getAccuracyColor(currentAccuracy) }}
-            >
-              <span className="accuracy-label">Accuracy</span>
-              <span className="accuracy-value">{currentAccuracy}%</span>
-            </div>
-          )}
+          <div className="results-container">
+            {currentAccuracy !== null && (
+              <div
+                className="accuracy-display"
+                style={{ backgroundColor: getAccuracyColor(currentAccuracy) }}
+              >
+                <span className="accuracy-label">Accuracy</span>
+                <span className="accuracy-value">{currentAccuracy}%</span>
+              </div>
+            )}
 
-          {previousRecording && (
-            <button
-              onClick={handlePlayRecording}
-              className="play-button"
-            >
-              Play Previous Recording
-            </button>
-          )}
+            {previousRecording && (
+              <button
+                onClick={handlePlayRecording}
+                className="play-button"
+              >
+                Play Previous Recording
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>

@@ -163,3 +163,45 @@
   }
 }
 
+/* Desktop and Laptop Optimizations */
+@media (min-width: 1025px) {
+  .phoneme-group-list {
+    max-width: 1200px;
+    padding: 20px;
+  }
+
+  .group-list-header {
+    padding: 40px;
+    margin-bottom: 40px;
+    border-radius: 20px;
+  }
+
+  .group-list-header h1 {
+    font-size: 2.5rem;
+  }
+
+  .group-list-header .subtitle {
+    font-size: 1.1rem;
+  }
+
+  .group-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+  }
+
+  .group-button {
+    padding: 32px 28px;
+    border-radius: 18px;
+    min-height: 120px;
+  }
+
+  .group-button h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+
+  .group-count {
+    font-size: 1rem;
+  }
+}
+

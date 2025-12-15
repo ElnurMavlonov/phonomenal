@@ -456,11 +456,23 @@ export function playAudio(audioBlob: Blob): void {
         // On iOS, this might fail if not in response to user gesture
         // Try again with a slight delay
         setTimeout(() => {
-          audio.play().catch((err) => {
-            console.error('Retry failed:', err);
-            URL.revokeObjectURL(audioUrl);
-            alert('Failed to play audio. Please ensure you clicked the play button.');
-          });
+          const retryPromise = audio.play();
+          if (retryPromise !== undefined) {
+            retryPromise.catch((err) => {
+              console.error('Retry failed:', err);
+              URL.revokeObjectURL(audioUrl);
+              alert('Failed to play audio. Please ensure you clicked the play button.');
+            });
+          } else {
+            // Fallback for older browsers where play() returns undefined
+            try {
+              audio.play();
+            } catch (err) {
+              console.error('Retry failed:', err);
+              URL.revokeObjectURL(audioUrl);
+              alert('Failed to play audio. Please ensure you clicked the play button.');
+            }
+          }
         }, 100);
       });
   } else {
