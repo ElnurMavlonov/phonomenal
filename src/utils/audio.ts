@@ -464,11 +464,14 @@ export function playAudio(audioBlob: Blob): void {
         }, 100);
       });
   } else {
-    // Fallback for older browsers
-    audio.play().catch((err) => {
+    // Fallback for older browsers where play() returns undefined
+    // Don't call .catch() since undefined has no catch method
+    try {
+      audio.play();
+    } catch (err) {
       console.error('Play failed:', err);
       URL.revokeObjectURL(audioUrl);
       alert('Failed to play audio. Please try again.');
-    });
+    }
   }
 }
