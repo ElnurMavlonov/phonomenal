@@ -9,22 +9,27 @@
   padding-bottom: 128px; /* pb-32 equivalent - clear fixed footer */
 }
 
-/* Fixed Header - Scientific Minimalist */
+/* Fixed Header - Edge-to-Edge */
 .practice-header {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 50;
+  margin: 0;
+  width: 100%;
   background: rgba(248, 250, 252, 0.9); /* bg-slate-50/90 */
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid #E2E8F0; /* border-slate-200 */
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
-  height: 64px; /* h-16 */
+  min-height: 64px; /* h-16 */
   display: flex;
   align-items: center;
-  padding: 0 20px;
+  padding-top: env(safe-area-inset-top, 0); /* Safe area inside header */
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 0;
   gap: 15px;
 }
 
@@ -113,19 +118,24 @@
   font-style: italic;
 }
 
-/* Fixed Footer Navigation - Scientific Minimalist */
+/* Fixed Footer Navigation - Edge-to-Edge */
 .navigation-buttons {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
   z-index: 50;
+  margin: 0;
+  width: 100%;
   background: rgba(255, 255, 255, 0.9); /* bg-white/90 */
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-top: 1px solid #E2E8F0; /* border-slate-200 */
   box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.05);
-  padding: 16px; /* p-4 */
+  padding-top: 16px; /* p-4 */
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-bottom: max(16px, env(safe-area-inset-bottom, 0)); /* Safe area inside footer */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -174,43 +184,50 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
+  /* Mobile: No centering, scrollable content */
   .practice-mode {
     max-width: 100%;
     width: 100%;
+    margin: 0;
     padding: 0;
-    /* Use dynamic viewport height to prevent UI jumping */
     min-height: 100dvh;
-    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* No centering on mobile */
+    align-items: stretch;
     overflow-y: auto;
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    /* Safe area support */
-    padding-top: env(safe-area-inset-top, 0);
-    padding-bottom: env(safe-area-inset-bottom, 0);
+    background: #F8FAFC; /* bg-gray-50 */
+    /* Clear fixed header and footer */
+    padding-top: calc(64px + env(safe-area-inset-top, 0)); /* Header height + safe area */
+    padding-bottom: calc(80px + env(safe-area-inset-bottom, 0)); /* Footer height + safe area */
   }
 
   .practice-header {
-    padding: 0;
-    padding-top: max(0px, env(safe-area-inset-top));
+    margin: 0 !important;
+    width: 100% !important;
+    left: 0 !important;
+    right: 0 !important;
+    padding-top: env(safe-area-inset-top, 0) !important; /* Safe area inside header */
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    padding-bottom: 0 !important;
     flex-wrap: nowrap;
     gap: 12px;
-    border-radius: 0;
-    box-shadow: none;
+    border-radius: 0 !important; /* No rounded corners on mobile */
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     border: none;
     border-bottom: 1px solid #E2E8F0;
-    position: sticky;
-    top: 0;
-    background: #F8FAFC;
-    z-index: 10;
-    min-height: 70px;
+    position: fixed !important;
+    top: 0 !important;
+    background: rgba(248, 250, 252, 0.9) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    z-index: 50 !important;
+    min-height: 64px !important;
     display: flex;
     align-items: center;
-    padding-left: 16px;
-    padding-right: 16px;
-    padding-bottom: 16px;
   }
 
   .practice-header .back-button {
@@ -263,23 +280,26 @@
   }
 
   .navigation-buttons {
-    padding: 16px 20px;
-    padding-bottom: max(16px, calc(env(safe-area-inset-bottom, 0) + 16px));
+    padding-top: 16px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: max(16px, env(safe-area-inset-bottom, 0));
     flex-wrap: nowrap;
     gap: 12px;
-    border-radius: 0;
+    border-radius: 0; /* No rounded corners on mobile */
     box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.05);
     border: none;
     border-top: 1px solid #E2E8F0;
-    position: fixed; /* Fixed on mobile */
+    position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
+    margin: 0;
+    width: 100%;
     background: rgba(255, 255, 255, 0.9);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     z-index: 50;
-    margin-top: 0;
     flex-shrink: 0;
   }
 
@@ -315,7 +335,7 @@
     gap: 24px !important;
   }
 
-  /* Desktop: Keep fixed header and footer */
+  /* Desktop: Centered layout with fixed header and footer */
   .practice-mode {
     display: flex;
     flex-direction: column;
@@ -323,15 +343,19 @@
     padding: 0 20px;
     max-width: 896px; /* max-w-4xl equivalent */
     width: 100%;
+    margin: 0 auto;
     padding-top: 80px; /* Clear fixed header */
     padding-bottom: 140px; /* Clear fixed footer */
     min-height: 100vh;
-    justify-content: center;
+    justify-content: center; /* Center on desktop only */
+    overflow-y: auto;
+    background: #F8FAFC;
   }
 
   .practice-header {
     max-width: 100%;
     width: 100%;
+    padding-top: 0; /* No safe area on desktop */
   }
 
   .navigation-buttons {
@@ -345,6 +369,7 @@
     max-width: 100%;
     width: 100%;
     margin: 0;
+    padding-bottom: 16px; /* No safe area on desktop */
   }
 }
 

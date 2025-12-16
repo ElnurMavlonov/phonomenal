@@ -324,26 +324,24 @@
     max-width: 100%;
     width: 100%;
     padding: 0;
+    margin: 0;
     display: flex;
     flex-direction: column;
-    flex: 1;
-    min-height: 0;
-    overflow-y: auto;
+    justify-content: flex-start; /* No centering on mobile */
+    align-items: stretch;
+    min-height: auto; /* Don't force full height */
+    overflow-y: visible; /* Let parent handle scrolling */
     -webkit-overflow-scrolling: touch;
-    /* Safe area support */
-    padding-top: env(safe-area-inset-top, 0);
-    padding-bottom: env(safe-area-inset-bottom, 0);
-    /* Use dynamic viewport height to prevent UI jumping */
-    min-height: 100dvh;
-    height: 100dvh;
+    background: #F8FAFC;
   }
 
   .word-card {
     padding: 20px 16px;
-    padding-bottom: 100px; /* Space for navigation footer only */
+    padding-bottom: 120px; /* Extra space to ensure content is visible above footer */
     border-radius: 0;
     width: 100%;
     max-width: 100%;
+    margin: 0;
     box-shadow: none;
     border: none;
     display: flex;
