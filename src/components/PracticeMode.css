@@ -50,7 +50,7 @@
 
 .phoneme-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: 1fr; /* Mobile: single column */
   gap: 15px;
   margin-bottom: 20px;
 }
@@ -136,14 +136,18 @@
     max-width: 100%;
     width: 100%;
     padding: 0;
-    min-height: 100vh;
-    height: 100vh;
+    /* Use dynamic viewport height to prevent UI jumping */
+    min-height: 100dvh;
+    height: 100dvh;
     overflow-y: auto;
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
     position: relative;
     display: flex;
     flex-direction: column;
+    /* Safe area support */
+    padding-top: env(safe-area-inset-top, 0);
+    padding-bottom: env(safe-area-inset-bottom, 0);
   }
 
   .practice-header {
@@ -212,20 +216,23 @@
   }
 
   .navigation-buttons {
-    padding: 20px;
-    padding-bottom: max(20px, calc(env(safe-area-inset-bottom) + 20px));
+    padding: 16px 20px;
+    padding-bottom: max(16px, calc(env(safe-area-inset-bottom, 0) + 16px));
     flex-wrap: nowrap;
     gap: 12px;
     border-radius: 0;
-    box-shadow: none;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
     border: none;
-    border-top: 1px solid #E2E8F0;
-    position: sticky;
+    border-top: 2px solid #E2E8F0;
+    position: fixed; /* Fixed on mobile */
     bottom: 0;
-    background: #F8FAFC;
-    z-index: 10;
-    margin-top: auto; /* Push to bottom in flex container */
-    flex-shrink: 0; /* Don't shrink */
+    left: 0;
+    right: 0;
+    background: white;
+    backdrop-filter: blur(10px);
+    z-index: 20;
+    margin-top: 0;
+    flex-shrink: 0;
   }
 
   .nav-button {
@@ -243,29 +250,83 @@
 
 @media (min-width: 769px) and (max-width: 1024px) {
   .practice-mode {
-    max-width: 800px;
+    max-width: 896px; /* Match card width */
   }
 
   .phoneme-grid {
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    grid-template-columns: repeat(3, 1fr) !important; /* 3 columns on md */
+    gap: 24px !important;
   }
 }
 
 /* Desktop and Laptop Optimizations */
+@media (min-width: 769px) {
+  /* Desktop: Phoneme grid - 3 columns on md */
+  .phoneme-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 24px !important;
+  }
+
+  /* Desktop: Navigation buttons relative, not fixed - integrated with card */
+  .practice-mode {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 20px;
+    max-width: 896px; /* max-w-4xl equivalent */
+    width: 100%;
+  }
+
+  .practice-header {
+    max-width: 896px; /* Match card width */
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .navigation-buttons {
+    position: relative !important;
+    bottom: auto !important;
+    left: auto !important;
+    right: auto !important;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08) !important;
+    background: white !important;
+    backdrop-filter: none !important;
+    max-width: 896px; /* Match card width */
+    width: 100%;
+    margin: 0 auto;
+    margin-top: 16px;
+    border: 1px solid #E2E8F0;
+    z-index: 10 !important;
+  }
+}
+
+/* Large Desktop (lg:) - 4 columns for phoneme grid */
+@media (min-width: 1025px) {
+  .phoneme-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+  }
+}
+
 @media (min-width: 1025px) {
   .practice-mode {
-    max-width: 1200px;
+    max-width: 896px; /* Match card width */
     padding: 20px;
     display: flex;
     flex-direction: column;
-    height: calc(100vh - 60px); /* Fixed height to account for app padding */
-    overflow: hidden; /* Prevent container scrolling */
+    height: auto; /* Allow natural height */
+    overflow: visible; /* Allow scrolling if needed */
   }
 
   .practice-header {
     padding: 24px 32px;
     margin-bottom: 24px;
-    flex-shrink: 0; /* Don't shrink header */
+    flex-shrink: 0;
+    max-width: 896px; /* Match card width */
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .practice-header h2 {
@@ -277,8 +338,8 @@
   }
 
   .phoneme-grid {
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 24px !important;
   }
 
   .phoneme-button {
@@ -300,17 +361,22 @@
 
   .navigation-buttons {
     padding: 16px 32px;
-    margin-top: auto; /* Push to bottom in flex container */
-    flex-shrink: 0; /* Don't shrink */
-    position: relative; /* Ensure it's in normal flow */
-    z-index: 5; /* Above content but below header */
-    background: #F8FAFC; /* Match background */
-    border-top: 1px solid #E2E8F0; /* Visual separator */
-    border-radius: 0 0 15px 15px;
+    margin-top: 24px;
+    flex-shrink: 0;
+    position: relative !important; /* Relative on desktop, not fixed */
+    z-index: 10 !important; /* High z-index to ensure visibility */
+    background: white !important;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px !important;
     display: flex;
-    justify-content: center; /* Center the buttons */
+    justify-content: center;
     align-items: center;
-    gap: 0; /* No gap - buttons directly adjacent */
+    gap: 0;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    max-width: 896px; /* Match card width */
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .nav-button {

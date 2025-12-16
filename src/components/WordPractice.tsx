@@ -172,93 +172,141 @@ export default function WordPractice({
       <div className="word-card">
         <div className="word-header">
           <span className="word-number">Word {wordNumber} of {totalWords}</span>
-          <span className="phoneme-badge">{phoneme.symbol}</span>
+          <span className="phoneme-badge phoneme-badge-header">{phoneme.symbol}</span>
         </div>
         
+        {/* Compact Header: Phoneme badge above (mobile), word and listen button side-by-side */}
         <div className="word-display">
-          <h2 className="target-word">{word.word}</h2>
+          <div className="phoneme-badge-container">
+            <span className="phoneme-badge">{phoneme.symbol}</span>
+          </div>
+          <div className="word-and-model-row">
+            <h2 className="target-word">{word.word}</h2>
+            <button
+              onClick={handleListenToModel}
+              className="listen-model-button-icon"
+              type="button"
+              aria-label="Listen to model pronunciation"
+            >
+              🔊
+            </button>
+          </div>
           <p className="phoneme-info">Practice the sound: {phoneme.symbol}</p>
-          <button
-            onClick={handleListenToModel}
-            className="listen-model-button"
-            type="button"
-          >
-            🔊 Listen to Model
-          </button>
         </div>
 
-        <div className="recording-section">
+        <div className="content-section">
+          {/* Desktop: Regular recording buttons */}
+          <div className="recording-section">
+            {!isRecording && !isProcessing && (
+              <button
+                onClick={handleStartRecording}
+                className="record-button"
+              >
+                Start Recording
+              </button>
+            )}
+
+            {isRecording && (
+              <div className="recording-active">
+                <div className="recording-indicator">
+                  <span className="pulse-dot"></span>
+                  Recording...
+                </div>
+                <button
+                  onClick={handleStopRecording}
+                  className="stop-button"
+                >
+                  Stop Recording
+                </button>
+              </div>
+            )}
+
+            {isProcessing && (
+              <div className="processing">
+                <div className="spinner"></div>
+                <p>Processing...</p>
+              </div>
+            )}
+          </div>
+
+          {/* Unified Feedback Card */}
+          {!recognizedText && currentAccuracy === null && !isRecording && !isProcessing && (
+            <div className="feedback-card-placeholder">
+              <p className="placeholder-text">Record your pronunciation to see results</p>
+            </div>
+          )}
+
+          {(recognizedText || currentAccuracy !== null) && (
+            <div 
+              className="unified-feedback-card"
+              style={{ 
+                borderColor: currentAccuracy !== null ? getAccuracyColor(currentAccuracy) : '#E2E8F0',
+                borderWidth: currentAccuracy !== null ? '3px' : '2px'
+              }}
+            >
+              {recognizedText && (
+                <div className="recognized-text-unified">
+                  <span className="recognized-label-unified">Recognized:</span>
+                  <span className="recognized-value-unified">"{recognizedText}"</span>
+                </div>
+              )}
+              
+              {currentAccuracy !== null && (
+                <div 
+                  className="accuracy-badge"
+                  style={{ backgroundColor: getAccuracyColor(currentAccuracy) }}
+                >
+                  <span className="accuracy-value-badge">{currentAccuracy}%</span>
+                  {confidenceScore !== null && (
+                    <span className="confidence-badge">Confidence: {Math.round(confidenceScore * 100)}%</span>
+                  )}
+                </div>
+              )}
+
+              {/* Secondary buttons container */}
+              <div className="secondary-buttons-container">
+                {previousRecording && recognizedText && (
+                  <button
+                    onClick={handlePlayRecording}
+                    className="play-recording-button-unified"
+                    type="button"
+                  >
+                    <span className="play-icon">▶</span>
+                    <span>Play Your Recording</span>
+                  </button>
+                )}
+
+                {currentAccuracy !== null && (
+                  <button
+                    onClick={handleTryAgain}
+                    className="try-again-button-unified"
+                    type="button"
+                  >
+                    Try Again
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Mobile: Thumb Zone Recording Button - Fixed at bottom */}
+        <div className="recording-button-container">
           {!isRecording && !isProcessing && (
             <button
               onClick={handleStartRecording}
-              className="record-button"
+              className="record-button-thumb"
             >
               Start Recording
             </button>
           )}
 
           {isRecording && (
-            <div className="recording-active">
-              <div className="recording-indicator">
-                <span className="pulse-dot"></span>
-                Recording...
-              </div>
-              <button
-                onClick={handleStopRecording}
-                className="stop-button"
-              >
-                Stop Recording
-              </button>
-            </div>
-          )}
-
-          {isProcessing && (
-            <div className="processing">
-              <div className="spinner"></div>
-              Processing...
-            </div>
-          )}
-
-          {recognizedText && (
-            <div className="recognized-text">
-              <span className="recognized-label">Recognized:</span>
-              <span className="recognized-value">"{recognizedText}"</span>
-            </div>
-          )}
-
-          {previousRecording && recognizedText && (
             <button
-              onClick={handlePlayRecording}
-              className="play-recording-button"
-              type="button"
+              onClick={handleStopRecording}
+              className="stop-button-thumb"
             >
-              <span className="play-icon">▶</span>
-              <span>Play Your Recording</span>
-            </button>
-          )}
-
-          <div className="results-container">
-            {currentAccuracy !== null && (
-              <div
-                className="accuracy-display"
-                style={{ backgroundColor: getAccuracyColor(currentAccuracy) }}
-              >
-                <span className="accuracy-label">Accuracy</span>
-                <span className="accuracy-value">{currentAccuracy}%</span>
-                {confidenceScore !== null && (
-                  <span className="confidence-score">Confidence: {Math.round(confidenceScore * 100)}%</span>
-                )}
-              </div>
-            )}
-          </div>
-
-          {currentAccuracy !== null && (
-            <button
-              onClick={handleTryAgain}
-              className="try-again-button"
-              type="button"
-            >
-              Try Again
+              Stop Recording
             </button>
           )}
         </div>

@@ -31,11 +31,15 @@
   border-radius: 20px;
   font-weight: 600;
   font-size: 0.9rem;
+  display: inline-block;
 }
 
 .word-display {
   text-align: center;
   margin-bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .target-word {
@@ -78,6 +82,9 @@
   cursor: pointer;
   transition: all 0.3s;
   min-width: 200px;
+  background: #2563EB;
+  color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .record-button {
@@ -89,6 +96,10 @@
   background: #1D4ED8;
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+}
+
+.record-button:active {
+  transform: translateY(0);
 }
 
 .stop-button {
@@ -131,6 +142,23 @@
   background: #2563EB;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+/* Desktop: Larger listen button */
+@media (min-width: 769px) {
+  .listen-model-button-icon {
+    padding: 12px;
+    min-width: 48px;
+    min-height: 48px;
+    font-size: 1.4rem;
+    background: #DBEAFE;
+    color: #2563EB;
+  }
+
+  .listen-model-button-icon:hover {
+    background: #BFDBFE;
+    transform: scale(1.05);
+  }
 }
 
 .play-recording-button {
@@ -295,18 +323,24 @@
   .word-practice {
     max-width: 100%;
     width: 100%;
-    padding: 20px;
+    padding: 0;
     display: flex;
     flex-direction: column;
     flex: 1;
-    min-height: 0; /* Allow flex shrinking */
+    min-height: 0;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-    padding-top: 20px;
+    /* Safe area support */
+    padding-top: env(safe-area-inset-top, 0);
+    padding-bottom: env(safe-area-inset-bottom, 0);
+    /* Use dynamic viewport height to prevent UI jumping */
+    min-height: 100dvh;
+    height: 100dvh;
   }
 
   .word-card {
-    padding: 32px 24px;
+    padding: 20px 16px;
+    padding-bottom: 180px; /* Space for recording button (70px) + navigation (70px) + extra */
     border-radius: 0;
     width: 100%;
     max-width: 100%;
@@ -315,69 +349,318 @@
     display: flex;
     flex-direction: column;
     flex: 1;
-    min-height: 0; /* Allow flex shrinking */
+    min-height: 0;
+    background: white;
   }
 
   .word-header {
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
-    margin-bottom: 30px;
+    margin-bottom: 16px;
+  }
+
+  .word-number {
+    font-size: 0.85rem;
+    color: #64748B;
+  }
+
+  /* Compact Header: Phoneme badge above word (mobile only) */
+  .phoneme-badge-container {
+    text-align: center;
+    margin-bottom: 12px;
+  }
+
+  .phoneme-badge-header {
+    display: none !important; /* Hide header badge on mobile */
+  }
+
+  .phoneme-badge {
+    display: inline-block;
+    background: #2563EB;
+    color: white;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+
+  /* Word and Listen button side-by-side */
+  .word-and-model-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 8px;
   }
 
   .target-word {
-    font-size: 2.8rem;
-    margin: 20px 0;
+    font-size: 2.5rem;
+    margin: 0;
     letter-spacing: 1px;
+    flex: 1;
+    text-align: center;
+  }
+
+  .listen-model-button-icon {
+    padding: 12px;
+    background: #DBEAFE;
+    color: #2563EB;
+    border: none;
+    border-radius: 50%;
+    font-size: 1.3rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    min-width: 48px;
+    min-height: 48px;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .listen-model-button-icon:hover {
+    background: #BFDBFE;
+    transform: scale(1.05);
+  }
+
+  .listen-model-button-icon:active {
+    transform: scale(0.95);
   }
 
   .phoneme-info {
-    font-size: 1.05rem;
-    margin-top: 12px;
+    font-size: 0.9rem;
+    margin-top: 0;
+    text-align: center;
+    color: #64748B;
   }
 
-  .recording-section {
-    gap: 24px;
-    width: 100%;
-  }
-
-  .results-container {
+  .content-section {
+    flex: 1;
+    display: flex;
     flex-direction: column;
-    width: 100%;
-    gap: 20px;
+    gap: 16px;
+    margin-bottom: 20px;
   }
 
-  .record-button,
-  .stop-button {
-    padding: 18px 24px;
+  /* Unified Feedback Card */
+  .feedback-card-placeholder {
+    background: #F8FAFC;
+    border: 2px dashed #CBD5E1;
+    border-radius: 12px;
+    padding: 40px 20px;
+    text-align: center;
+    margin: 20px 0;
+  }
+
+  .placeholder-text {
+    color: #94A3B8;
+    font-size: 0.95rem;
+    margin: 0;
+  }
+
+  .unified-feedback-card {
+    background: white;
+    border: 2px solid #E2E8F0;
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+
+  .recognized-text-unified {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .recognized-label-unified {
+    font-size: 0.8rem;
+    color: #64748B;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .recognized-value-unified {
+    font-size: 1.5rem;
+    color: #1E293B;
+    font-weight: 700;
+    font-style: italic;
+  }
+
+  .accuracy-badge {
+    padding: 12px 20px;
+    border-radius: 12px;
+    color: white;
+    text-align: center;
+    align-self: center;
+    min-width: 120px;
+  }
+
+  .accuracy-value-badge {
+    display: block;
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .confidence-badge {
+    display: block;
+    font-size: 0.75rem;
+    opacity: 0.9;
+    margin-top: 4px;
+    font-weight: 500;
+  }
+
+  .play-recording-button-unified {
+    padding: 10px 16px;
+    background: white;
+    color: #2563EB;
+    border: 2px solid #2563EB;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    align-self: center;
+  }
+
+  .play-recording-button-unified:hover {
+    background: #EFF6FF;
+  }
+
+  .play-icon {
+    font-size: 0.8rem;
+  }
+
+  .try-again-button-unified {
+    padding: 10px 20px;
+    background: #64748B;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    align-self: center;
+  }
+
+  .try-again-button-unified:hover {
+    background: #475569;
+  }
+
+  /* Mobile: Secondary buttons container */
+  .secondary-buttons-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    margin-top: 16px;
+  }
+
+  .secondary-buttons-container .play-recording-button-unified,
+  .secondary-buttons-container .try-again-button-unified {
+    width: 100%;
+    align-self: stretch;
+  }
+
+  /* Thumb Zone Recording Button - Fixed at bottom (Mobile only) */
+  .recording-button-container {
+    position: fixed;
+    bottom: 70px; /* Above navigation footer */
+    left: 0;
+    right: 0;
+    padding: 12px 16px;
+    background: white;
+    border-top: 1px solid #E2E8F0;
+    z-index: 15;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+  }
+
+  .record-button-thumb,
+  .stop-button-thumb {
+    width: 100%;
+    padding: 16px 24px;
     font-size: 1.1rem;
-    min-width: 100%;
-    width: 100%;
-    min-height: 56px; /* Better touch target */
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    min-height: 56px;
+    cursor: pointer;
+    transition: all 0.3s;
+    background: #2563EB;
+    color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
 
-  .play-button {
-    padding: 18px 24px;
-    font-size: 1.1rem;
-    min-width: 100%;
-    width: 100%;
-    min-height: 56px; /* Better touch target */
+  .record-button-thumb {
+    background: #2563EB;
+    color: white;
   }
 
-  .accuracy-display {
-    padding: 24px 30px;
-    min-width: 100%;
-    width: 100%;
+  .record-button-thumb:hover {
+    background: #1D4ED8;
+    box-shadow: 0 6px 12px rgba(37, 99, 235, 0.3);
   }
 
-  .accuracy-value {
-    font-size: 2.2rem;
+  .record-button-thumb:active {
+    transform: scale(0.98);
   }
 
-  .recognized-text {
-    min-width: 100%;
-    width: 100%;
-    padding: 14px 18px;
+  .stop-button-thumb {
+    background: #EF4444;
+    color: white;
+  }
+
+  .stop-button-thumb:hover {
+    background: #DC2626;
+    box-shadow: 0 6px 12px rgba(239, 68, 68, 0.3);
+  }
+
+  .stop-button-thumb:active {
+    transform: scale(0.98);
+  }
+
+  .recording-active {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 20px;
+  }
+
+  .recording-indicator {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #EF4444;
+    font-weight: 600;
+    font-size: 1rem;
+  }
+
+  .processing {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 40px 20px;
+    color: #64748B;
+    font-weight: 600;
+  }
+
+  .processing p {
+    margin: 0;
+    font-size: 0.95rem;
   }
 }
 
@@ -396,29 +679,46 @@
 }
 
 /* Desktop and Laptop Optimizations */
-@media (min-width: 1025px) {
-  .word-practice {
-    max-width: 900px;
-    padding: 20px;
-    flex: 1 1 auto; /* Grow to fill available space */
-    min-height: 0; /* Critical for flex shrinking */
-    overflow: hidden; /* Let word-card handle scrolling */
-    display: flex;
-    flex-direction: column;
+@media (min-width: 769px) {
+  /* Hide mobile-specific fixed buttons on desktop */
+  .recording-button-container {
+    display: none !important;
   }
 
-  .word-card {
-    padding: 50px 60px 40px 60px; /* More bottom padding to prevent cutoff */
-    border-radius: 24px;
-    flex: 1 1 auto; /* Grow and shrink as needed */
-    min-height: 0; /* Allow flex shrinking */
-    max-height: 100%; /* Don't exceed parent height */
+  .word-practice {
+    max-width: 100%;
+    width: 100%;
+    margin: 0 auto;
+    padding: 20px;
     display: flex;
     flex-direction: column;
-    overflow-y: auto; /* Allow scrolling if content is too tall */
-    overflow-x: hidden;
-    scrollbar-width: thin; /* Better scrollbar on desktop */
-    scrollbar-color: #CBD5E1 #F8FAFC;
+    justify-content: flex-start;
+    align-items: center;
+    min-height: auto !important;
+    height: auto !important;
+    padding-top: 48px !important;
+    padding-bottom: 48px !important;
+    max-width: 896px; /* Match card width */
+  }
+
+  /* Desktop Card Container - Central Card - Widened */
+  .word-card {
+    background: white !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+    border-radius: 24px !important;
+    padding: 40px !important;
+    padding-bottom: 32px !important; /* pb-8 equivalent for navigation spacing */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 24px;
+    border: 1px solid #E2E8F0;
+    overflow: visible;
+    max-height: none;
+    width: 100%;
+    max-width: 896px; /* max-w-4xl equivalent - much wider */
+    margin: 0 auto;
+    margin-top: 48px; /* mt-12 equivalent */
   }
 
   .word-card::-webkit-scrollbar {
@@ -440,39 +740,134 @@
   }
 
   .word-header {
-    margin-bottom: 40px;
-    flex-shrink: 0; /* Don't shrink header */
+    margin-bottom: 24px;
+    justify-content: space-between;
   }
 
   .word-number {
-    font-size: 1rem;
+    font-size: 0.95rem;
   }
 
-  .phoneme-badge {
+  /* Desktop: Phoneme badge back in header */
+  .phoneme-badge-container {
+    display: none; /* Hide mobile badge container on desktop */
+  }
+
+  .phoneme-badge-header {
+    display: inline-block !important;
     padding: 8px 18px;
     font-size: 1rem;
   }
 
   .word-display {
-    margin-bottom: 50px;
-    flex-shrink: 0; /* Don't shrink word display */
+    margin-bottom: 32px;
+    align-items: center;
+  }
+
+  /* Desktop: Word and listen button side-by-side but larger */
+  .word-and-model-row {
+    gap: 16px;
+    margin-bottom: 12px;
   }
 
   .target-word {
-    font-size: 4.5rem;
-    margin: 30px 0;
-    letter-spacing: 3px;
+    font-size: 4rem;
+    margin: 0;
+    letter-spacing: 2px;
+  }
+
+  /* Minimalistic listen icon - clean and simple */
+  .listen-model-button-icon {
+    padding: 0 !important;
+    min-width: 32px !important;
+    min-height: 32px !important;
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 1rem !important;
+    background: transparent !important;
+    color: #64748B !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border: 1px solid #E2E8F0 !important;
+    box-shadow: none !important;
+    transition: all 0.2s !important;
+  }
+
+  .listen-model-button-icon:hover {
+    background: #F1F5F9 !important;
+    color: #2563EB !important;
+    border-color: #CBD5E1 !important;
   }
 
   .phoneme-info {
-    font-size: 1.3rem;
-    margin-top: 15px;
+    font-size: 1.1rem;
+    margin-top: 8px;
   }
 
-  .recording-section {
+  .content-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     gap: 24px;
-    flex-shrink: 0; /* Don't shrink recording section */
-    margin-bottom: 20px; /* Add space before results */
+    margin-bottom: 24px;
+    width: 100%;
+  }
+
+  /* Desktop: Show regular recording buttons */
+  .recording-section {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    margin-bottom: 0;
+  }
+
+  .record-button,
+  .stop-button {
+    padding: 14px 40px !important;
+    font-size: 1rem !important;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    min-width: 240px;
+    width: auto;
+    background: #2563EB !important;
+    color: white !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.3s;
+    display: inline-block !important;
+  }
+
+  .record-button:hover {
+    background: #1D4ED8 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+  }
+
+  .stop-button {
+    background: #EF4444 !important;
+    color: white !important;
+  }
+
+  .stop-button:hover {
+    background: #DC2626 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);
+  }
+
+  .recording-active {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .recording-indicator {
+    font-size: 1.1rem;
   }
 
   .record-button,
@@ -546,22 +941,104 @@
     font-size: 1.2rem;
   }
 
-  .listen-model-button {
-    margin-top: 24px;
-    padding: 14px 28px;
-    font-size: 1.1rem;
+  /* Desktop: Unified feedback card styling - Proper card appearance */
+  .unified-feedback-card {
+    max-width: 100%;
+    width: 100%;
+    margin: 0 auto 24px auto;
+    border-radius: 12px !important;
+    padding: 24px !important;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06) !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    text-align: center;
   }
 
-  .play-recording-button {
+  .recognized-label-unified {
+    text-align: center;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .recognized-text-unified {
+    text-align: center;
+    width: 100%;
+  }
+
+  .recognized-value-unified {
+    font-size: 1.8rem;
+    text-align: center;
+  }
+
+  .accuracy-badge {
+    min-width: 150px;
+    padding: 16px 24px;
+    border-radius: 12px;
+    text-align: center;
+  }
+
+  .accuracy-value-badge {
+    font-size: 2.5rem;
+    display: block;
+    text-align: center;
+  }
+
+  .confidence-badge {
+    font-size: 0.85rem;
+    text-align: center;
+    display: block;
+  }
+
+  /* Desktop: Secondary buttons container */
+  .secondary-buttons-container {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    justify-content: center;
     margin-top: 16px;
-    padding: 12px 24px;
-    font-size: 1rem;
+    width: 100%;
   }
 
-  .try-again-button {
-    margin-top: 24px;
-    padding: 14px 32px;
-    font-size: 1.1rem;
+  /* Style Play Recording button */
+  .play-recording-button-unified {
+    padding: 8px 16px !important;
+    font-size: 0.875rem !important;
+    font-weight: 500 !important;
+    background: white !important;
+    color: #374151 !important;
+    border: 1px solid #D1D5DB !important;
+    border-radius: 8px !important;
+    transition: all 0.2s !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    cursor: pointer;
+  }
+
+  .play-recording-button-unified:hover {
+    background: #F9FAFB !important;
+    border-color: #9CA3AF !important;
+  }
+
+  /* Style Try Again button */
+  .try-again-button-unified {
+    padding: 8px 16px !important;
+    font-size: 0.875rem !important;
+    font-weight: 500 !important;
+    background: #F3F4F6 !important;
+    color: #374151 !important;
+    border: none !important;
+    border-radius: 8px !important;
+    transition: all 0.2s !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    cursor: pointer;
+  }
+
+  .try-again-button-unified:hover {
+    background: #E5E7EB !important;
   }
 
   .confidence-score {
