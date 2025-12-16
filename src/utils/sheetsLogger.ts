@@ -22,36 +22,47 @@ const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx4wgI8o7ni75
  * Uses no-cors mode to avoid CORS issues with Google Apps Script
  */
 export async function logAttemptToSheets(data: PracticeAttemptData): Promise<void> {
-  // Don't log if URL is not configured
-  if (GOOGLE_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbx4wgI8o7ni75k9UcU1nz_58cgpoFBiPC7OSRUV2e5b27NS635UxVxthdTzv4ebkX70Jw/exec') {
+  // Don't log if URL is not configured (check for placeholder)
+  if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.includes('YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE')) {
     console.warn('Google Sheets logging is not configured. Please set GOOGLE_SCRIPT_URL in sheetsLogger.ts');
     return;
   }
 
   try {
-    // Use FormData for no-cors requests
-    const formData = new FormData();
-    formData.append('studentName', data.studentName);
-    formData.append('studentId', data.studentId);
-    formData.append('targetPhoneme', data.targetPhoneme);
-    formData.append('targetWord', data.targetWord);
-    formData.append('recognizedText', data.recognizedText);
-    formData.append('accuracyScore', data.accuracyScore.toString());
-    formData.append('confidenceScore', data.confidenceScore.toString());
-    formData.append('timestamp', data.timestamp);
-    formData.append('userAgent', data.userAgent);
-    formData.append('timeTakenMs', data.timeTakenMs.toString());
+    // Build URL-encoded query string (works best with no-cors and Google Apps Script)
+    const params = new URLSearchParams();
+    params.append('studentName', data.studentName);
+    params.append('studentId', data.studentId);
+    params.append('targetPhoneme', data.targetPhoneme);
+    params.append('targetWord', data.targetWord);
+    params.append('recognizedText', data.recognizedText);
+    params.append('accuracyScore', data.accuracyScore.toString());
+    params.append('confidenceScore', data.confidenceScore.toString());
+    params.append('timestamp', data.timestamp);
+    params.append('userAgent', data.userAgent);
+    params.append('timeTakenMs', data.timeTakenMs.toString());
 
-    // Send with no-cors mode (can't read response, but data is sent)
-    await fetch(GOOGLE_SCRIPT_URL, {
-      method: 'POST',
-      mode: 'no-cors', // Required for Google Apps Script
-      body: formData,
+    const queryString = params.toString();
+    
+    console.log('Logging to Google Sheets:', {
+      studentName: data.studentName,
+      targetWord: data.targetWord,
+      accuracy: data.accuracyScore,
+      url: GOOGLE_SCRIPT_URL
     });
 
-    console.log('Practice attempt logged to Google Sheets');
+    // Send with no-cors mode using GET method (more reliable with Google Apps Script)
+    // Google Apps Script can read query parameters from both GET and POST
+    const urlWithParams = `${GOOGLE_SCRIPT_URL}?${queryString}`;
+    
+    await fetch(urlWithParams, {
+      method: 'GET', // Use GET for no-cors (more reliable)
+      mode: 'no-cors', // Required for Google Apps Script
+    });
+
+    console.log('Practice attempt logged to Google Sheets (request sent)');
   } catch (error) {
-    // Silently fail - we don't want to interrupt the user experience
+    // Log error but don't interrupt user experience
     console.error('Failed to log to Google Sheets:', error);
   }
 }
@@ -67,6 +78,10 @@ export async function logAttemptToSheets(data: PracticeAttemptData): Promise<voi
  * 5. Copy the Web App URL and replace GOOGLE_SCRIPT_URL above
  * 
  * Code to paste in Google Apps Script:
+ * 
+ * function doGet(e) {
+ *   return doPost(e);
+ * }
  * 
  * function doPost(e) {
  *   try {
@@ -88,17 +103,19 @@ export async function logAttemptToSheets(data: PracticeAttemptData): Promise<voi
  *       ]);
  *     }
  *     
- *     // Get form data
- *     var studentName = e.parameter.studentName || '';
- *     var studentId = e.parameter.studentId || '';
- *     var targetPhoneme = e.parameter.targetPhoneme || '';
- *     var targetWord = e.parameter.targetWord || '';
- *     var recognizedText = e.parameter.recognizedText || '';
- *     var accuracyScore = e.parameter.accuracyScore || '0';
- *     var confidenceScore = e.parameter.confidenceScore || '0';
- *     var timestamp = e.parameter.timestamp || new Date().toISOString();
- *     var userAgent = e.parameter.userAgent || '';
- *     var timeTakenMs = e.parameter.timeTakenMs || '0';
+ *     // Get parameters (works with both GET query params and POST form data)
+ *     var parameters = e.parameter || {};
+ *     
+ *     var studentName = parameters.studentName || '';
+ *     var studentId = parameters.studentId || '';
+ *     var targetPhoneme = parameters.targetPhoneme || '';
+ *     var targetWord = parameters.targetWord || '';
+ *     var recognizedText = parameters.recognizedText || '';
+ *     var accuracyScore = parameters.accuracyScore || '0';
+ *     var confidenceScore = parameters.confidenceScore || '0';
+ *     var timestamp = parameters.timestamp || new Date().toISOString();
+ *     var userAgent = parameters.userAgent || '';
+ *     var timeTakenMs = parameters.timeTakenMs || '0';
  *     
  *     // Append row to sheet
  *     sheet.appendRow([
@@ -117,6 +134,7 @@ export async function logAttemptToSheets(data: PracticeAttemptData): Promise<voi
  *     return ContentService.createTextOutput(JSON.stringify({success: true}))
  *       .setMimeType(ContentService.MimeType.JSON);
  *   } catch (error) {
+ *     Logger.log('Error in doPost: ' + error.toString());
  *     return ContentService.createTextOutput(JSON.stringify({success: false, error: error.toString()}))
  *       .setMimeType(ContentService.MimeType.JSON);
  *   }
