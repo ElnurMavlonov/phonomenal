@@ -291,27 +291,6 @@ export default function WordPractice({
             </div>
           )}
         </div>
-
-        {/* Mobile: Thumb Zone Recording Button - Fixed at bottom */}
-        <div className="recording-button-container">
-          {!isRecording && !isProcessing && (
-            <button
-              onClick={handleStartRecording}
-              className="record-button-thumb"
-            >
-              Start Recording
-            </button>
-          )}
-
-          {isRecording && (
-            <button
-              onClick={handleStopRecording}
-              className="stop-button-thumb"
-            >
-              Stop Recording
-            </button>
-          )}
-        </div>
       </div>
     </div>
   );
