@@ -402,29 +402,35 @@
     text-align: center;
   }
 
+  /* Mobile: Minimalistic listen icon */
   .listen-model-button-icon {
-    padding: 12px;
-    background: #DBEAFE;
-    color: #2563EB;
-    border: none;
-    border-radius: 50%;
-    font-size: 1.3rem;
+    padding: 8px !important;
+    min-width: 40px !important;
+    min-height: 40px !important;
+    width: 40px !important;
+    height: 40px !important;
+    background: transparent !important;
+    color: #94A3B8 !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border: none !important;
+    box-shadow: none !important;
+    transition: all 0.2s !important;
     cursor: pointer;
-    transition: all 0.3s;
-    min-width: 48px;
-    min-height: 48px;
-    width: 48px;
-    height: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     flex-shrink: 0;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .listen-model-button-icon svg {
+    width: 24px;
+    height: 24px;
+    stroke-width: 1.5;
   }
 
   .listen-model-button-icon:hover {
-    background: #BFDBFE;
-    transform: scale(1.05);
+    background: #EFF6FF !important;
+    color: #2563EB !important;
   }
 
   .listen-model-button-icon:active {
@@ -692,12 +698,12 @@
     padding: 20px;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
-    min-height: auto !important;
+    min-height: calc(100vh - 144px) !important; /* Account for fixed header (64px) + footer (80px) */
     height: auto !important;
-    padding-top: 48px !important;
-    padding-bottom: 48px !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
     max-width: 896px; /* Match card width */
   }
 
@@ -776,29 +782,34 @@
     letter-spacing: 2px;
   }
 
-  /* Minimalistic listen icon - clean and simple */
+  /* Minimalistic listen icon - Ghost button style */
   .listen-model-button-icon {
-    padding: 0 !important;
-    min-width: 32px !important;
-    min-height: 32px !important;
-    width: 32px !important;
-    height: 32px !important;
-    font-size: 1rem !important;
+    padding: 8px !important;
+    min-width: 40px !important;
+    min-height: 40px !important;
+    width: 40px !important;
+    height: 40px !important;
     background: transparent !important;
-    color: #64748B !important;
+    color: #94A3B8 !important; /* text-slate-400 */
     border-radius: 50% !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    border: 1px solid #E2E8F0 !important;
+    border: none !important;
     box-shadow: none !important;
     transition: all 0.2s !important;
+    cursor: pointer;
+  }
+
+  .listen-model-button-icon svg {
+    width: 24px;
+    height: 24px;
+    stroke-width: 1.5;
   }
 
   .listen-model-button-icon:hover {
-    background: #F1F5F9 !important;
-    color: #2563EB !important;
-    border-color: #CBD5E1 !important;
+    background: #EFF6FF !important; /* hover:bg-blue-50 */
+    color: #2563EB !important; /* hover:text-blue-600 */
   }
 
   .phoneme-info {

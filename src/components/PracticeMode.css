@@ -2,17 +2,29 @@
   width: 100%;
   max-width: 800px;
   margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding-top: 64px; /* pt-24 equivalent - clear fixed header */
+  padding-bottom: 128px; /* pb-32 equivalent - clear fixed footer */
 }
 
+/* Fixed Header - Scientific Minimalist */
 .practice-header {
-  background: #F8FAFC;
-  border-radius: 15px;
-  padding: 20px;
-  margin-bottom: 20px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-  border: 1px solid #E2E8F0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background: rgba(248, 250, 252, 0.9); /* bg-slate-50/90 */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid #E2E8F0; /* border-slate-200 */
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
+  height: 64px; /* h-16 */
   display: flex;
   align-items: center;
+  padding: 0 20px;
   gap: 15px;
 }
 
@@ -29,23 +41,31 @@
   display: block;
 }
 
+/* Minimalist Back Button - Text Link Style */
 .back-button {
-  background: #E2E8F0;
+  background: transparent !important;
   border: none;
-  padding: 8px 16px;
-  border-radius: 8px;
+  padding: 8px 12px;
   cursor: pointer;
   font-size: 0.9rem;
-  transition: background 0.2s;
-  color: #1E293B;
+  font-weight: 500;
+  color: #64748B; /* text-slate-500 */
+  transition: color 0.2s;
   min-height: 44px;
   display: flex;
   align-items: center;
+  gap: 8px;
   justify-content: center;
 }
 
 .back-button:hover {
-  background: #CBD5E1;
+  color: #1E293B; /* hover:text-slate-800 */
+}
+
+.back-button svg {
+  width: 16px;
+  height: 16px;
+  stroke-width: 2;
 }
 
 .phoneme-grid {
@@ -93,31 +113,53 @@
   font-style: italic;
 }
 
+/* Fixed Footer Navigation - Scientific Minimalist */
 .navigation-buttons {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background: rgba(255, 255, 255, 0.9); /* bg-white/90 */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid #E2E8F0; /* border-slate-200 */
+  box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.05);
+  padding: 16px; /* p-4 */
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #F8FAFC;
-  padding: 20px;
-  border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-  border: 1px solid #E2E8F0;
-  margin-top: 20px;
+  gap: 12px;
 }
 
+/* Minimalist Navigation Buttons */
 .nav-button {
   padding: 10px 20px;
-  background: #2563EB;
-  color: white;
-  border: none;
   border-radius: 8px;
   cursor: pointer;
   font-size: 0.95rem;
-  transition: background 0.2s;
+  font-weight: 500;
+  transition: all 0.2s;
+  border: 1px solid #E2E8F0; /* border-slate-200 */
+  background: transparent; /* bg-transparent */
+  color: #475569; /* text-slate-600 */
 }
 
 .nav-button:hover:not(:disabled) {
+  background: #F8FAFC; /* hover:bg-slate-50 */
+  border-color: #CBD5E1;
+}
+
+/* Next button - Primary Blue */
+.nav-button:last-of-type {
+  background: #2563EB; /* Primary blue */
+  color: white;
+  border-color: #2563EB;
+}
+
+.nav-button:last-of-type:hover:not(:disabled) {
   background: #1D4ED8;
+  border-color: #1D4ED8;
 }
 
 .nav-button:disabled {
@@ -215,22 +257,28 @@
     font-size: 0.8rem;
   }
 
+  .practice-mode {
+    padding-top: max(64px, calc(env(safe-area-inset-top, 0) + 64px));
+    padding-bottom: max(128px, calc(env(safe-area-inset-bottom, 0) + 128px));
+  }
+
   .navigation-buttons {
     padding: 16px 20px;
     padding-bottom: max(16px, calc(env(safe-area-inset-bottom, 0) + 16px));
     flex-wrap: nowrap;
     gap: 12px;
     border-radius: 0;
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.05);
     border: none;
-    border-top: 2px solid #E2E8F0;
+    border-top: 1px solid #E2E8F0;
     position: fixed; /* Fixed on mobile */
     bottom: 0;
     left: 0;
     right: 0;
-    background: white;
-    backdrop-filter: blur(10px);
-    z-index: 20;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    z-index: 50;
     margin-top: 0;
     flex-shrink: 0;
   }
@@ -267,7 +315,7 @@
     gap: 24px !important;
   }
 
-  /* Desktop: Navigation buttons relative, not fixed - integrated with card */
+  /* Desktop: Keep fixed header and footer */
   .practice-mode {
     display: flex;
     flex-direction: column;
@@ -275,30 +323,28 @@
     padding: 0 20px;
     max-width: 896px; /* max-w-4xl equivalent */
     width: 100%;
+    padding-top: 80px; /* Clear fixed header */
+    padding-bottom: 140px; /* Clear fixed footer */
+    min-height: 100vh;
+    justify-content: center;
   }
 
   .practice-header {
-    max-width: 896px; /* Match card width */
+    max-width: 100%;
     width: 100%;
-    margin-left: auto;
-    margin-right: auto;
   }
 
   .navigation-buttons {
-    position: relative !important;
-    bottom: auto !important;
-    left: auto !important;
-    right: auto !important;
-    border-radius: 12px !important;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08) !important;
-    background: white !important;
-    backdrop-filter: none !important;
-    max-width: 896px; /* Match card width */
+    position: fixed !important; /* Keep fixed on desktop */
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    border-radius: 0 !important;
+    border-top: 1px solid #E2E8F0;
+    z-index: 50 !important;
+    max-width: 100%;
     width: 100%;
-    margin: 0 auto;
-    margin-top: 16px;
-    border: 1px solid #E2E8F0;
-    z-index: 10 !important;
+    margin: 0;
   }
 }
 
@@ -317,16 +363,18 @@
     flex-direction: column;
     height: auto; /* Allow natural height */
     overflow: visible; /* Allow scrolling if needed */
+    padding-top: 80px;
+    padding-bottom: 140px;
+    min-height: 100vh;
+    justify-content: center;
   }
 
   .practice-header {
-    padding: 24px 32px;
-    margin-bottom: 24px;
+    padding: 0 32px;
+    margin-bottom: 0;
     flex-shrink: 0;
-    max-width: 896px; /* Match card width */
+    max-width: 100%;
     width: 100%;
-    margin-left: auto;
-    margin-right: auto;
   }
 
   .practice-header h2 {
@@ -361,22 +409,25 @@
 
   .navigation-buttons {
     padding: 16px 32px;
-    margin-top: 24px;
+    margin-top: 0;
     flex-shrink: 0;
-    position: relative !important; /* Relative on desktop, not fixed */
-    z-index: 10 !important; /* High z-index to ensure visibility */
-    background: white !important;
-    border: 1px solid #E2E8F0;
-    border-radius: 12px !important;
+    position: fixed !important; /* Keep fixed on desktop */
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 50 !important;
+    background: rgba(255, 255, 255, 0.9) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border-top: 1px solid #E2E8F0;
+    border-radius: 0 !important;
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 0;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-    max-width: 896px; /* Match card width */
+    box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.05);
+    max-width: 100%;
     width: 100%;
-    margin-left: auto;
-    margin-right: auto;
   }
 
   .nav-button {

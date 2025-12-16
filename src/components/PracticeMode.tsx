@@ -84,7 +84,12 @@ export default function PracticeMode({ onBack, student }: PracticeModeProps) {
     return (
       <div className="practice-mode">
         <div className="practice-header">
-          <button onClick={handleBackToGroups} className="back-button">← Back</button>
+          <button onClick={handleBackToGroups} className="back-button">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+            </svg>
+            Back
+          </button>
           <h2>{group.name}</h2>
         </div>
         <div className="phoneme-grid">
@@ -113,7 +118,12 @@ export default function PracticeMode({ onBack, student }: PracticeModeProps) {
     return (
       <div className="practice-mode">
         <div className="practice-header">
-          <button onClick={handleBackToPhonemes} className="back-button">← Back</button>
+          <button onClick={handleBackToPhonemes} className="back-button">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+            </svg>
+            Back
+          </button>
           <div>
             <h2>Practice: {selectedPhoneme.symbol}</h2>
             <p className="phoneme-name">{selectedPhoneme.name}</p>
