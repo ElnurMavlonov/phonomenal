@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Phoneme, Word } from '../types';
+import { Phoneme, Word, Student } from '../types';
 import { phonemeGroups } from '../data/phonemes';
 import { getWordsByPhoneme } from '../data/words';
 import PhonemeGroupList from './PhonemeGroupList';
@@ -8,11 +8,12 @@ import './PracticeMode.css';
 
 interface PracticeModeProps {
   onBack: () => void;
+  student: Student;
 }
 
 type PracticeState = 'select-group' | 'select-phoneme' | 'practicing';
 
-export default function PracticeMode({ onBack }: PracticeModeProps) {
+export default function PracticeMode({ onBack, student }: PracticeModeProps) {
   const [state, setState] = useState<PracticeState>('select-group');
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
   const [selectedPhoneme, setSelectedPhoneme] = useState<Phoneme | null>(null);
@@ -126,6 +127,7 @@ export default function PracticeMode({ onBack }: PracticeModeProps) {
           totalWords={words.length}
           onRecordingComplete={handleRecordingComplete}
           previousRecording={recording}
+          student={student}
         />
 
         <div className="navigation-buttons">

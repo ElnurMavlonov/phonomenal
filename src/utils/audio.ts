@@ -10,6 +10,7 @@ interface SpeechRecognition extends EventTarget {
   continuous: boolean;
   interimResults: boolean;
   lang: string;
+  maxAlternatives: number;
   start(): void;
   stop(): void;
   abort(): void;
@@ -47,6 +48,11 @@ interface SpeechRecognitionErrorEvent {
   message: string;
 }
 
+export interface RecognitionAlternative {
+  transcript: string;
+  confidence: number;
+}
+
 export class AudioRecorder {
   private mediaRecorder: MediaRecorder | null = null;
   private audioChunks: Blob[] = [];
@@ -54,6 +60,7 @@ export class AudioRecorder {
   private speechRecognition: SpeechRecognition | null = null;
   private recognizedText: string = '';
   private recognitionConfidence: number = 0;
+  private recognitionAlternatives: RecognitionAlternative[] = [];
   private recognitionResolve: ((value: void) => void) | null = null;
 
   async startRecording(): Promise<void> {
@@ -80,6 +87,7 @@ export class AudioRecorder {
       this.audioChunks = [];
       this.recognizedText = '';
       this.recognitionConfidence = 0;
+      this.recognitionAlternatives = [];
 
       this.mediaRecorder.ondataavailable = (event) => {
         if (event.data.size > 0) {
@@ -124,17 +132,30 @@ export class AudioRecorder {
       recognition.continuous = true;
       recognition.interimResults = true; // Enable interim results to capture text faster
       recognition.lang = 'en-US';
+      recognition.maxAlternatives = 5; // Get up to 5 alternatives for better scoring
 
       recognition.onresult = (event: SpeechRecognitionEvent) => {
         // Collect all results and use the most recent final result
         let finalTranscript = '';
         let finalConfidence = 0;
+        const alternatives: RecognitionAlternative[] = [];
 
         for (let i = 0; i < event.results.length; i++) {
           const result = event.results[i];
           if (result.isFinal && result[0]) {
             finalTranscript = result[0].transcript.trim().toLowerCase();
             finalConfidence = result[0].confidence || 0;
+            
+            // Collect all alternatives for this final result
+            for (let j = 0; j < result.length; j++) {
+              const alt = result[j];
+              if (alt && alt.transcript) {
+                alternatives.push({
+                  transcript: alt.transcript.trim().toLowerCase(),
+                  confidence: alt.confidence || 0
+                });
+              }
+            }
           } else if (!result.isFinal && result[0]) {
             // Use interim result if no final result yet
             if (!finalTranscript) {
@@ -148,7 +169,10 @@ export class AudioRecorder {
         if (finalTranscript) {
           this.recognizedText = finalTranscript;
           this.recognitionConfidence = finalConfidence;
-          console.log('Recognized:', finalTranscript, 'Confidence:', finalConfidence);
+          this.recognitionAlternatives = alternatives.length > 0 ? alternatives : [
+            { transcript: finalTranscript, confidence: finalConfidence }
+          ];
+          console.log('Recognized:', finalTranscript, 'Confidence:', finalConfidence, 'Alternatives:', alternatives.length);
         }
       };
 
@@ -247,6 +271,10 @@ export class AudioRecorder {
 
   getRecognitionConfidence(): number {
     return this.recognitionConfidence;
+  }
+
+  getRecognitionAlternatives(): RecognitionAlternative[] {
+    return this.recognitionAlternatives;
   }
 
   private cleanup(): void {
@@ -378,7 +406,8 @@ export async function calculateAccuracy(
   targetPhoneme: string,
   _recordedAudio: Blob,
   recognizedText: string,
-  recognitionConfidence: number
+  recognitionConfidence: number,
+  alternatives: RecognitionAlternative[] = []
 ): Promise<number> {
   return new Promise((resolve) => {
     // If no recognized text, return low accuracy
@@ -387,14 +416,30 @@ export async function calculateAccuracy(
       return;
     }
 
-    // Calculate word-level accuracy
+    const targetLower = targetWord.toLowerCase().trim();
+    let primaryAccuracy = 0;
+
+    // Check primary result
     const wordAccuracy = calculateWordAccuracy(targetWord, recognizedText);
-    
-    // Calculate phoneme-level accuracy
     const phonemeAccuracy = calculatePhonemeAccuracy(targetWord, targetPhoneme, recognizedText);
-    
+    primaryAccuracy = Math.round(wordAccuracy * 0.4 + phonemeAccuracy * 0.6);
+
+    // If primary is wrong, check alternatives for partial credit
+    if (primaryAccuracy < 100 && alternatives.length > 1) {
+      for (const alt of alternatives) {
+        if (alt.transcript === targetLower) {
+          // Found correct match in alternatives - give partial credit (yellow zone: 60-79%)
+          // Partial credit: 60-79% based on alternative confidence
+          const partialCredit = Math.round(60 + (alt.confidence * 19)); // 60-79% range
+          primaryAccuracy = Math.max(primaryAccuracy, partialCredit);
+          console.log('Found correct match in alternatives, giving partial credit:', partialCredit);
+          break;
+        }
+      }
+    }
+
     // Combine both accuracies (weighted: 40% word, 60% phoneme for phoneme-focused app)
-    const combinedAccuracy = Math.round(wordAccuracy * 0.4 + phonemeAccuracy * 0.6);
+    let combinedAccuracy = primaryAccuracy;
     
     // Adjust based on recognition confidence if available
     let finalAccuracy = combinedAccuracy;

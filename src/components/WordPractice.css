@@ -111,6 +111,72 @@
   transform: translateY(-2px);
 }
 
+.listen-model-button {
+  margin-top: 20px;
+  padding: 12px 24px;
+  background: #3B82F6;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.listen-model-button:hover {
+  background: #2563EB;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.play-recording-button {
+  margin-top: 12px;
+  padding: 10px 20px;
+  background: white;
+  color: #2563EB;
+  border: 2px solid #2563EB;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.play-recording-button:hover {
+  background: #EFF6FF;
+  transform: translateY(-2px);
+}
+
+.play-icon {
+  font-size: 0.85rem;
+}
+
+.try-again-button {
+  margin-top: 20px;
+  padding: 12px 28px;
+  background: #64748B;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.try-again-button:hover {
+  background: #475569;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(100, 116, 139, 0.3);
+}
+
 .recording-active {
   display: flex;
   flex-direction: column;
@@ -189,6 +255,14 @@
   display: block;
   font-size: 2.5rem;
   font-weight: 700;
+}
+
+.confidence-score {
+  display: block;
+  font-size: 0.85rem;
+  opacity: 0.9;
+  margin-top: 8px;
+  font-weight: 500;
 }
 
 .recognized-text {
@@ -413,18 +487,16 @@
     font-size: 1.2rem;
   }
 
-  /* Side-by-side layout for results on desktop */
+  /* Results container - now only contains accuracy display */
   .results-container {
     flex-direction: row;
     justify-content: center;
-    align-items: stretch; /* Stretch to same height */
-    gap: 20px; /* Reasonable gap between elements */
-    flex-wrap: nowrap; /* Prevent wrapping */
+    align-items: center;
+    gap: 0; /* No gap needed since only one element */
     width: 100%;
-    max-width: 540px; /* Optimal width for side-by-side layout */
     margin: 0 auto 30px auto; /* Center horizontally, keep bottom margin */
     flex-shrink: 0; /* Don't shrink */
-    padding: 0; /* No padding to prevent cutoff issues */
+    padding: 0;
   }
 
   .accuracy-display {
@@ -458,21 +530,6 @@
     overflow: visible; /* Ensure text isn't clipped */
   }
 
-  .play-button {
-    padding: 20px 32px; /* Generous padding to match accuracy display */
-    font-size: 1rem;
-    min-width: 200px;
-    max-width: 260px;
-    flex: 1 1 0; /* Equal flex growth */
-    border-radius: 14px;
-    white-space: nowrap;
-    box-sizing: border-box;
-    min-height: 90px; /* Match accuracy display height */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
   .recognized-text {
     padding: 16px 28px;
     min-width: 280px;
@@ -487,6 +544,29 @@
 
   .recognized-value {
     font-size: 1.2rem;
+  }
+
+  .listen-model-button {
+    margin-top: 24px;
+    padding: 14px 28px;
+    font-size: 1.1rem;
+  }
+
+  .play-recording-button {
+    margin-top: 16px;
+    padding: 12px 24px;
+    font-size: 1rem;
+  }
+
+  .try-again-button {
+    margin-top: 24px;
+    padding: 14px 32px;
+    font-size: 1.1rem;
+  }
+
+  .confidence-score {
+    font-size: 0.9rem;
+    margin-top: 10px;
   }
 }
 

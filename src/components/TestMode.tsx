@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react';
-import { Word } from '../types';
+import { Word, Student } from '../types';
 import { getRandomWords } from '../data/words';
 import WordPractice from './WordPractice';
 import './TestMode.css';
 
 interface TestModeProps {
   onBack: () => void;
+  student: Student;
 }
 
-export default function TestMode({ onBack }: TestModeProps) {
+export default function TestMode({ onBack, student }: TestModeProps) {
   const [words, setWords] = useState<Word[]>([]);
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [recordings, setRecordings] = useState<Record<number, { audioBlob: Blob; accuracy: number }>>({});
@@ -124,6 +125,7 @@ export default function TestMode({ onBack }: TestModeProps) {
         totalWords={words.length}
         onRecordingComplete={handleRecordingComplete}
         previousRecording={recording}
+        student={student}
       />
 
       <div className="navigation-buttons">
